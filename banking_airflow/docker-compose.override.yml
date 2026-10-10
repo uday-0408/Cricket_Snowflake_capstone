@@ -1,0 +1,16 @@
+services:
+  scheduler:
+    volumes:
+      - D:/Codes/practice/Banking_Snowflake_Capstone/dbt:/usr/local/airflow/dbt:rw
+      - D:/Codes/practice/Banking_Snowflake_Capstone/Data:/usr/local/airflow/data/raw:ro
+      - D:/Codes/practice/Banking_Snowflake_Capstone/banking_airflow/profile.yml:/home/astro/.dbt/profiles.yml
+  dag-processor:
+    volumes:
+      - D:/Codes/practice/Banking_Snowflake_Capstone/dbt:/usr/local/airflow/dbt:rw
+      - D:/Codes/practice/Banking_Snowflake_Capstone/Data:/usr/local/airflow/data/raw:ro
+      - D:/Codes/practice/Banking_Snowflake_Capstone/banking_airflow/profile.yml:/home/astro/.dbt/profiles.yml
+  api-server:
+    volumes:
+      - D:/Codes/practice/Banking_Snowflake_Capstone/dbt:/usr/local/airflow/dbt:rw
+      - D:/Codes/practice/Banking_Snowflake_Capstone/Data:/usr/local/airflow/data/raw:ro
+      - D:/Codes/practice/Banking_Snowflake_Capstone/banking_airflow/profile.yml:/home/astro/.dbt/profiles.yml
