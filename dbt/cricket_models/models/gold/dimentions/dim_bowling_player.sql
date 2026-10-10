@@ -1,8 +1,17 @@
+{{ config(
+    materialized='incremental',
+    schema='gold',
+    unique_key=['bowler_id','hkey']
+) }}
 with source as(
     select 
         *
     from
         {{ ref('cricket_clean')}}
+    {% if is_incremental() %}
+    where
+        delivery_timestamp >= (select max(delivery_timestamp) from {{ this }})
+    {% endif %}
 ),
 hash_data as(
     select
@@ -24,6 +33,7 @@ bawler_data as (
         ,bowling_style
         ,bowler_icc_rating
         ,delivery_timestamp
+        ,hkey
         ,row_number() over(
             partition by 
                 bowler_id,hkey
@@ -47,6 +57,9 @@ final as (
         *,
         case when rn2=1 then 1 else 0
         end as is_active
+        , lead(delivery_timestamp) over(partition by bowler_id, rn  order by rn) as velid_from,
+        lag(delivery_timestamp) over(partition by bowler_id, rn  order by rn) as velid_to
+ 
     from    
         latest
 )select * from final

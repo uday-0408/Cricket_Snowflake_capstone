@@ -1,10 +1,15 @@
 -- depends_on: {{ ref('cricket_clean') }}
-
+{{ config(
+    materialized='incremental',
+    schema='gold',
+    unique_key=['player_id','name']
+) }}
 with source as(
     select 
         *
     from
         {{ ref('cricket_clean')}}
+        
 ),
 batsman_data as (
     select

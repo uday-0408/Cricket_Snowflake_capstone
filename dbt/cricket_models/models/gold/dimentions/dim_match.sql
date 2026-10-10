@@ -1,8 +1,17 @@
+{{ config(
+    materialized='incremental',
+    schema='gold',
+    unique_key='match_id'
+) }}
 with source as(
     select 
         *
     from
         {{ ref('cricket_clean')}}
+    {% if is_incremental() %}
+    where
+        delivery_timestamp >= (select max(delivery_timestamp) from {{ this }})
+    {% endif %}
 ),
 data as(
     select 

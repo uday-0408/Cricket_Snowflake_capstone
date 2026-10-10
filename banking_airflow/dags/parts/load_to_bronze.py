@@ -96,7 +96,7 @@ COPY_INTO_SQL = """
     """
 SNOWFLAKE_CONN_ID = "snowflake_conn"
 with DAG(
-    dag_id="load_to_bronze",
+    dag_id="load_to_bronze_dag",
     start_date=datetime(2026, 10, 10),
     schedule='@hourly',
     catchup=False,

@@ -1,8 +1,17 @@
+{{ config(
+    materialized='incremental',
+    schema='gold',
+    unique_key=['batsman_id','hkey']
+) }}
 with source as(
     select 
         *
     from
         {{ ref('cricket_clean')}}
+    {% if is_incremental() %}
+    where
+        delivery_timestamp >= (select max(delivery_timestamp) from {{ this }})
+    {% endif %}
 ),
 hash_data as (
     select 
@@ -36,6 +45,7 @@ batsman_data as (
         ,batsman_icc_rating
         ,contract_id
         ,delivery_timestamp
+        ,hkey
         ,row_number() over(
             partition by batsman_id, hkey
             order by delivery_timestamp
@@ -62,4 +72,4 @@ final as (
         lag(delivery_timestamp) over(partition by batsman_id, rn  order by rn) as velid_to
     from    
         latest
-)select * from final;
+)select * from final

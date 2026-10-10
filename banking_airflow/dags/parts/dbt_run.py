@@ -5,7 +5,7 @@ from airflow.providers.standard.operators.bash import BashOperator
 
 
 with DAG(
-    dag_id="dbt_run",
+    dag_id="dbt_run_dag",
     start_date=datetime(2023, 1, 1),
     schedule=None,
     catchup=False,
